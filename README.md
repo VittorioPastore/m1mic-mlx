@@ -11,7 +11,7 @@ M1mic-MLX is [XMimic](https://github.com/nico-bohlinger/xmimic) ported to Apple 
 simulated robots on the CPU cores, and the world model, policy and critic train in [MLX](https://github.com/ml-explore/mlx)
 on the GPU. No NVIDIA stack, no cloud.
 
-<p align="center"><img src="figures/m1mic-mlx.png" width="90%" alt="1,024 simulated G1s on a laptop's CPU, backpropagation through 32 imagined steps on its GPU, and the policy next to its reference after 79 minutes"></p>
+<p align="center"><img src="figures/m1mic-mlx.png" width="100%" alt="1,024 simulated G1s on a laptop's CPU, backpropagation through 32 imagined steps on its GPU, and the policy next to its reference after 79 minutes"></p>
 
 On an M1 Pro with 16 GB, one policy tracks all 40 LAFAN1 clips after **79 minutes** of training, using 2.6 GB of memory.
 
