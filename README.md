@@ -9,7 +9,7 @@
 
 M1mic-MLX learns a world model of the robot and improves the policy by backpropagating through rollouts imagined in
 that model. MuJoCo's C engine steps the simulated robots on the CPU cores, and the world model, policy and critic
-train in [MLX](https://github.com/ml-explore/mlx) on the GPU. No NVIDIA stack, no cloud.
+train in [MLX](https://github.com/ml-explore/mlx) on the GPU. It runs on the laptop you already have.
 
 <p align="center"><img src="figures/m1mic-mlx.png" width="100%" alt="1,024 simulated G1s on a laptop's CPU, backpropagation through 32 imagined steps on its GPU, and the policy next to its reference after 79 minutes"></p>
 
