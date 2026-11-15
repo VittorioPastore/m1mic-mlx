@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+data/
+runs/
+assets/g1/assets/
+*.npz
+*.gif
+MUJOCO_LOG.TXT

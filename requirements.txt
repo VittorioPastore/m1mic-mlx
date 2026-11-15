@@ -1,0 +1,5 @@
+# Apple silicon, macOS, Python 3.11 to 3.13. Versions of the run in the README.
+mlx==0.32.4
+mujoco==3.17.0
+numpy==2.5.4
+pillow  # tools/render_rollout.py only

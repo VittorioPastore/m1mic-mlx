@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 150" width="640" height="150" role="img" aria-label="M1mic-MLX">
+  <g font-family="-apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif" text-anchor="middle">
+    <text x="320" y="92" font-size="96" letter-spacing="-4">
+      <tspan font-weight="800" fill="#1D1D1F">M</tspan><tspan font-weight="800" fill="#FF7A59">1</tspan><tspan font-weight="800" fill="#1D1D1F">mic</tspan><tspan dx="18" font-weight="200" fill="#6E6E73">MLX</tspan>
+    </text>
+    <text x="320" y="132" font-size="15" letter-spacing="5" fill="#6E6E73" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">HUMANOID MOTION TRACKING ON A MACBOOK</text>
+  </g>
+</svg>
