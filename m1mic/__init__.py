@@ -1,4 +1,6 @@
-"""XMimic on Apple silicon: MuJoCo steps the worlds on the CPU, MLX trains the world model, policy and critic on the GPU.
+"""M1mic-MLX: humanoid motion tracking trained on a Mac.
+
+MuJoCo steps the worlds on the CPU, MLX trains the world model, policy and critic on the GPU.
 
   model, motion, kin, rot    the G1 model, the reference motions and their kinematics
   sim, mdp, buffer           batched CPU simulator, tracking task, replay buffer

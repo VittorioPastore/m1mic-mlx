@@ -1,4 +1,4 @@
-"""Fixed-size replay buffer in numpy, laid out (time, world), ported from XMimic's buffer.py.
+"""Fixed-size replay buffer in numpy, laid out (time, world).
 
 Kept in numpy so rows can be written in place (an MLX array would be copied on every write).
 """

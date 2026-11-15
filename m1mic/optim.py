@@ -1,4 +1,4 @@
-"""MuonAdam and Adam as pure functions on MLX trees, ported from XMimic's optim.py.
+"""MuonAdam and Adam as pure functions on MLX trees.
 
 Muon (torch.optim.Muon with match_rms_adamw) runs on leaves where ``mask`` is True, torch-style Adam on the rest.
 Newton-Schulz runs in float32 here (bf16 in the JAX and torch versions).

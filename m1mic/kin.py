@@ -1,4 +1,4 @@
-"""Differentiable forward kinematics of the G1 in MLX. Port of XMimic's kin.py; the tree comes from the model meta."""
+"""Differentiable forward kinematics of the G1 in MLX. The tree comes from the model meta."""
 
 import mlx.core as mx
 import numpy as np

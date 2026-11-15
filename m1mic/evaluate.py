@@ -1,4 +1,4 @@
-"""Checkpoint evaluation on the CPU simulator with BlinkMimic's protocol. Port of XMimic's evaluate.py.
+"""Checkpoint evaluation on the CPU simulator with BlinkMimic's protocol.
 
     python -m m1mic.evaluate <run_dir> [--every 2] [--last 4] [--clips walk,run]
     python -m m1mic.evaluate <run_dir> --task velocity [--reps 4] [--grid 15]

@@ -1,6 +1,6 @@
 """World model, policy (motion encoder + shared decoder) and critic as pure functions on parameter trees.
 
-MLX port of XMimic's nets.py, float32 throughout. Running normalizers live in separate buffer trees that are updated
+float32 throughout. Running normalizers live in separate buffer trees that are updated
 from data, not by gradients.
 """
 

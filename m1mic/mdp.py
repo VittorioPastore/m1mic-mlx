@@ -1,4 +1,4 @@
-"""Observation, reward and termination of the tracking task. MLX port of XMimic's mdp.py.
+"""Observation, reward and termination of the tracking task.
 
 The same functions label simulator transitions and imagined world-model transitions. A state is the tuple
 S = (p, R, v, w, q, qd): root position, root rotation matrix, world-frame root velocities, joint positions, velocities.

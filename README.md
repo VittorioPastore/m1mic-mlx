@@ -7,9 +7,9 @@
 
 <p align="center"><b>Train a whole-body motion tracker for the Unitree G1 on your laptop.</b><br>40 motions, one MacBook, 79 minutes.</p>
 
-M1mic-MLX is [XMimic](https://github.com/nico-bohlinger/xmimic) ported to Apple silicon. MuJoCo's C engine steps the
-simulated robots on the CPU cores, and the world model, policy and critic train in [MLX](https://github.com/ml-explore/mlx)
-on the GPU. No NVIDIA stack, no cloud.
+M1mic-MLX learns a world model of the robot and improves the policy by backpropagating through rollouts imagined in
+that model. MuJoCo's C engine steps the simulated robots on the CPU cores, and the world model, policy and critic
+train in [MLX](https://github.com/ml-explore/mlx) on the GPU. No NVIDIA stack, no cloud.
 
 <p align="center"><img src="figures/m1mic-mlx.png" width="100%" alt="1,024 simulated G1s on a laptop's CPU, backpropagation through 32 imagined steps on its GPU, and the policy next to its reference after 79 minutes"></p>
 
@@ -55,42 +55,64 @@ least 0.82 with none of the 40 clips failing, held for three checkpoints in a ro
 | 4,500 | 112 | 0.834 | 0 |
 | 4,750 | 117 | 0.833 | 0 |
 
-For scale, XMimic reaches the same target in 2.5 minutes on one H100, so the laptop is about 30 times slower. This is
-one run on one machine. Numbers from other Macs are welcome.
+This is one run on one machine. Numbers from other Macs are welcome.
 
-## What is the same as XMimic
+## Where it comes from
 
-The algorithm and its hyperparameters (BlinkMimic's `PRESET[main]`), the task, the networks, the probe sweeps, the
-velocity-command task (`--vel_share`) and the checkpoint format, so XMimic's tools read these checkpoints.
+M1mic-MLX is the laptop end of a line of work that kept making humanoid motion tracking cheaper to train. It takes
+something from each step:
 
-Every ported function was checked against the JAX code in float32, including the losses and gradients of the
-world-model update and of the policy's backpropagation through imagined rollouts. They agree to 1e-5.
+| work | what it showed | what M1mic-MLX takes from it |
+|---|---|---|
+| [SuperMimic](https://arxiv.org/abs/2610.28480) | One differentiable world model replaces model-free RL: 3 hours on one GPU instead of 7 days on 128 | The method, and the velocity-command task (`--vel_share`) |
+| [InstantTrack](https://github.com/Huy-Quang-Dao/instantTrack), from [supermimic_vibed](https://github.com/zita-ch/supermimic_vibed) | An open implementation that trains in minutes | The code base the later trainers grew from |
+| [BlinkMimic](https://arxiv.org/abs/2611.16422) | About 3 minutes on one GPU | The training recipe and hyperparameters (`PRESET[main]`), the probe sweeps, the evaluation protocol |
+| [XMimic](https://github.com/nico-bohlinger/xmimic) | Under a minute on four H100s, in JAX | The functional structure of the code and the checkpoint format |
 
-## What differs
+The numerics were checked function by function against a JAX reference in float32, including the losses and
+gradients of the world-model update and of the policy's backpropagation through imagined rollouts. They agree to 1e-5.
+For scale, XMimic reaches the same target in 2.5 minutes on one H100, so the laptop is about 30 times slower.
 
-- **Sizes.** The defaults are a quarter of the published batch dimensions: 1024 worlds, world-model and policy batches
-  of 512, at most 384 probe worlds. The ratios are unchanged. The published size is
-  `--num_envs 4096 --wm_batch 2048 --pi_batch 2048 --eprobe_max 1536`.
+## What is new here
+
+Getting this onto a laptop is not a change of backend. A Mac has no GPU simulator, shared memory instead of VRAM, and
+a GPU that is slow at things a data-center card does not notice.
+
 - **Physics on the CPU.** A thread pool steps the worlds with `mj_step`, about 22,000 control steps per second on 8
   cores. Each world has its own friction and CoM offset and keeps its solver warm start. The threads use a copy of the
   model with the meshes reduced to their convex hulls (15 MB instead of 75 MB, same dynamics).
-- **A Python loop.** Nothing compiles whole iterations. The replay buffer is numpy, since host and GPU share memory,
-  and the update functions are `mx.compile`d. XMimic's multi-GPU layouts and fast learner are not here.
-- **float32.** Apple GPUs have no bf16. float16 matmuls were 15 % faster and not worth the precision.
+- **Math written for Metal.** 3x3 products are fused column-row sums with their own gradients, and reductions over
+  inner axes are avoided. Both are several times faster on Apple GPUs than the obvious form.
+- **Sized for 16 GB.** The defaults are a quarter of the published batch dimensions: 1024 worlds, world-model and
+  policy batches of 512, at most 384 probe worlds. The ratios are unchanged. The published size is
+  `--num_envs 4096 --wm_batch 2048 --pi_batch 2048 --eprobe_max 1536`.
+- **Memory.** MLX's cache of freed GPU buffers is capped (`--cache_gb`, default 1). Its default is nearly all of the
+  memory, and a 16 GB Mac then swaps. The replay buffer is numpy, since host and GPU share memory.
 - **Reference tables.** The motion library precomputes velocities, body poses and goal features per frame when they
   fit in 2 GB, and derives them on demand otherwise.
+- **Guards.** `mlx.nn.elu` has a NaN gradient above x = 88, which froze a run, so the networks use their own ELU.
+  World-model and critic steps with a non-finite loss are skipped.
+- **float32.** Apple GPUs have no bf16. float16 matmuls were 15 % faster and not worth the precision.
 - **Evaluation.** One world per checkpoint and clip. The CPU simulator is deterministic, so replicas would be identical.
-- **Memory.** MLX's cache of freed GPU buffers is capped (`--cache_gb`, default 1). Its default is nearly all of the
-  memory, and a 16 GB Mac then swaps.
-
-Two things the port had to guard against: `mlx.nn.elu` has a NaN gradient above x = 88, which froze a run, so the
-networks use their own ELU; and world-model or critic steps with a non-finite loss are skipped.
+- **Velocity commands.** The RL training of SuperMimic's velocity encoder is not in its released code. It is
+  implemented here from the paper.
 
 ## Citation
 
-This is a port. If you use it, please cite the work it comes from:
+If you use M1mic-MLX, please cite the work it builds on:
 
 ```bibtex
+@misc{liao2026supermimic,
+  title = {SuperMimic: Scaling Humanoid Whole-Body Control with One Differentiable World Model},
+  note  = {arXiv:2610.28480},
+  year  = {2026}
+}
+@misc{chen2026blinkmimic,
+  title  = {BlinkMimic: Training a Humanoid Motion Tracker in Minutes on a Single GPU},
+  author = {Chen, Fuyi},
+  note   = {arXiv:2611.16422},
+  year   = {2026}
+}
 @misc{bohlinger2026xmimicxsoma,
   title  = {XMimic and XSoma: Learning Humanoid Motion Tracking and Locomotion in Under a Minute},
   author = {Bohlinger, Nico and Peters, Jan},
@@ -98,9 +120,6 @@ This is a port. If you use it, please cite the work it comes from:
   url    = {https://nico-bohlinger.github.io/papers/2026_xmimic_xsoma.pdf}
 }
 ```
-
-and [BlinkMimic](https://arxiv.org/abs/2611.16422) and [SuperMimic](https://arxiv.org/abs/2610.28480), which XMimic
-reimplements.
 
 ## License
 

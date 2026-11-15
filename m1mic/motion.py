@@ -1,4 +1,4 @@
-"""Reference motion library in MLX. Port of XMimic's motion.py.
+"""Reference motion library in MLX.
 
 G1-retargeted LAFAN1 clips (30 fps CSV) are resampled to the 50 Hz control rate. Velocities and tracked-body poses
 are derived from the stored root and joint trajectories. ``*_np`` arrays mirror the frame bookkeeping for host code.

@@ -1,6 +1,6 @@
 """Batched G1 tracking simulator on the CPU: MuJoCo's C engine in a thread pool.
 
-Port of XMimic's sim.py, which runs MuJoCo Warp on a GPU. Physics state and episode bookkeeping are numpy arrays with
+Physics state and episode bookkeeping are numpy arrays with
 one row per world. Observations, rewards, terminations and reset poses are computed in MLX.
 """
 

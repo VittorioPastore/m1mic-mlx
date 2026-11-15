@@ -1,6 +1,6 @@
 """Training loop, train log (CSV, console, TensorBoard) and checkpoints.
 
-Checkpoints use XMimic's npz layout, so its evaluation and rollout tools read them too.
+Checkpoints use the same npz layout as XMimic's, so its tools read them too.
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ import numpy as np
 
 
 from . import nets
-from .algorithm import XMimic
+from .algorithm import M1mic
 from .config import Config
 from .tblog import TBWriter
 
@@ -74,7 +74,7 @@ class RunLog:
     COLS = ["iteration", "wall_min", "sim_steps", "wm", "wm8", "pi", "v", "ir", "gn", "surv", "sim_r", "ep_len", "ep_ret", "term_frac",
             "it_per_s", "lr", "pi_lr", "nonfinite"]  # fmt: skip
 
-    def __init__(self, xm: XMimic, cfg: Config, t0: float, args_meta: dict):
+    def __init__(self, xm: M1mic, cfg: Config, t0: float, args_meta: dict):
         self.xm, self.cfg, self.t0, self.args_meta = xm, cfg, t0, args_meta
         self.cols = self.COLS + (self.VEL_COLS if cfg.vel_share > 0 else [])
         self.f = open(os.path.join(cfg.log_dir, "train_log.csv"), "a")
@@ -161,7 +161,7 @@ def run(cfg: Config):
     meta = {**dataclasses.asdict(cfg), "backend": "mlx", "mlx_version": getattr(mx, "__version__", "")}
     write_json(os.path.join(cfg.log_dir, "args.json"), meta)
     t_proc = time.time()
-    xm = XMimic(cfg)
+    xm = M1mic(cfg)
     xm.init()
     print(f"setup {time.time() - t_proc:.1f} s | motion {xm.motion.num_frames} frames, {xm.motion.num_bins} bins, "
           f"{len(xm.motion.names)} clips | goal {xm.goal_dim} critic_in {xm.critic_in} wm_in {xm.wm_in} | {cfg.num_envs} worlds on "

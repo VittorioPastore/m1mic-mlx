@@ -1,4 +1,4 @@
-"""BlinkMimic's training iteration in MLX, ported from XMimic's algorithm.py.
+"""One training iteration: world-model learning and policy improvement through imagined rollouts.
 
 Each iteration collects sim steps into the replay buffer, updates the world model, updates the policy by backprop
 through imagined rollouts and fits the critic. Physics and buffer are numpy on the CPU, networks and updates MLX.
@@ -55,7 +55,7 @@ class Mirror:
                                xi[..., 3 + J :]], axis=-1)  # fmt: skip
 
 
-class XMimic:
+class M1mic:
     """Model, motion library, simulators, training state and the steps of the training iteration."""
 
     def __init__(self, cfg: Config, probes: bool | None = None):
@@ -293,7 +293,7 @@ class XMimic:
                 w[k_] = mx.concatenate([fn(w[k_][:n]), w[k_][n:]], axis=0)
         (loss, e_last), grads = mx.value_and_grad(self.wm_loss)(wm, wm_b, w)
         grads, gn = optim.clip_by_global_norm(grads, 1.0)
-        finite = mx.isfinite(gn)  # skip non-finite updates, as for the policy (XMimic only guards the policy)
+        finite = mx.isfinite(gn)  # skip non-finite updates, as for the policy
         grads = tmap(lambda g: mx.where(finite, g, 0.0), grads)
         wm, opt = optim.step(wm, grads, opt, self.wm_mask, lr, betas=(0.9, 0.999), ok=finite)
         m = w["mask"][:, -1]
@@ -498,7 +498,7 @@ class XMimic:
                 lv, gv = mx.value_and_grad(loss_v)(critic["vel"], perms["v"][j])
                 g["vel"], gnv = optim.clip_by_global_norm(gv, 1.0)
                 gn = gn + gnv
-            finite = mx.isfinite(gn)  # skip non-finite steps (XMimic only guards the policy)
+            finite = mx.isfinite(gn)  # skip non-finite steps
             g = tmap(lambda x: mx.where(finite, x, 0.0), g)
             critic, opt_v = optim.step(critic, g, opt_v, self.critic_mask, lr, ok=finite)
         return critic, critic_b, opt_v, lm, lv

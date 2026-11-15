@@ -1,6 +1,6 @@
-"""Batched rotations in MLX. Port of XMimic's rot.py. Quaternions are wxyz, matrices act on column vectors.
+"""Batched rotations in MLX. Quaternions are wxyz, matrices act on column vectors.
 
-Same formulas as the JAX version, written to avoid reductions over inner axes, which are slow on Metal.
+Written to avoid reductions over inner axes, which are slow on Metal.
 """
 
 import mlx.core as mx

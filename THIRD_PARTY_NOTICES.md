@@ -1,10 +1,14 @@
 # Third-party notices
 
+M1mic-MLX builds on a line of open-source work: SuperMimic, supermimic_vibed, InstantTrack, BlinkMimic and XMimic.
+This file lists what comes from each and under which license.
+
 ## XMimic
 
-`m1mic/` is a port of XMimic (https://github.com/nico-bohlinger/xmimic) to MLX, used under XMimic's MIT License
-(Copyright (c) 2026 Nico Bohlinger), whose text is the one in [LICENSE](LICENSE). XMimic in turn derives from the
-projects below, and their notices apply to this repository as they do to XMimic.
+`m1mic/` derives from XMimic (https://github.com/nico-bohlinger/xmimic): its modules started as MLX rewrites of
+XMimic's JAX modules. That code is used under XMimic's MIT License (Copyright (c) 2026 Nico Bohlinger), whose text is
+the one in [LICENSE](LICENSE). XMimic in turn derives from the projects below, and their notices apply to this
+repository as they do to XMimic.
 
 ## BlinkMimic
 
@@ -110,10 +114,10 @@ the License. Unless required by applicable law or agreed to in writing, software
 distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 ```
 
-Changes from SuperMimic's code: rewritten in MLX inside XMimic's networks and BPTT learner; one velocity encoder beside the
+Changes from SuperMimic's code: rewritten in MLX inside this repository's networks and BPTT learner; one velocity encoder beside the
 motion encoder instead of a dictionary of task encoders; the command's mean velocity is the displacement over the window
 and its window is clamped to the clip, not to the whole library; the velocity rows see an identity reference orientation
-in XMimic's observation, which has one; the reference skip of the decoder is switched off when the task is on.
+in the observation, which has one; the reference skip of the decoder is switched off when the task is on.
 
 ## Unitree G1 description
 
