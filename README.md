@@ -103,12 +103,10 @@ The method, the numerical checks and the measurements are written up in a
 [technical report](https://www.vittoriopastore.com/m1mic-mlx-report.pdf). If you use M1mic-MLX, please cite it:
 
 ```bibtex
-@techreport{pastore2026m1micmlx,
+@misc{pastore2026m1micmlx,
   title  = {M1mic-MLX: A World-Model Reinforcement Learning Framework for Training Humanoid Whole-Body Motion Trackers on Apple Silicon},
   author = {Pastore, Vittorio},
   year   = {2026},
-  month  = nov,
-  type   = {Technical Report},
   url    = {https://www.vittoriopastore.com/m1mic-mlx-report.pdf}
 }
 ```
