@@ -103,9 +103,10 @@ If you use M1mic-MLX, please cite the work it builds on:
 
 ```bibtex
 @misc{liao2026supermimic,
-  title = {SuperMimic: Scaling Humanoid Whole-Body Control with One Differentiable World Model},
-  note  = {arXiv:2610.28480},
-  year  = {2026}
+  title  = {SuperMimic: Scaling Humanoid Whole-Body Control with One Differentiable World Model},
+  author = {Liao, Qiayuan and Shao, Yiyang and Long, Junfeng and Zakka, Kevin and Horowitz, Roberto and Abbeel, Pieter and Sreenath, Koushil},
+  note   = {arXiv:2610.28480},
+  year   = {2026}
 }
 @misc{chen2026blinkmimic,
   title  = {BlinkMimic: Training a Humanoid Motion Tracker in Minutes on a Single GPU},
