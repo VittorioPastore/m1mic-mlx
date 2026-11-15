@@ -124,6 +124,9 @@ If you use M1mic-MLX, please cite the work it builds on:
 
 ## License
 
-MIT, see [LICENSE](LICENSE). The code this derives from is listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+MIT, see [LICENSE](LICENSE), with one exception: the velocity-command task derives from SuperMimic's code, and those
+parts remain under the Apache License 2.0 ([licenses/SuperMimic-Apache-2.0.txt](licenses/SuperMimic-Apache-2.0.txt)).
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) lists which parts those are and everything else this code derives from.
+
 The LAFAN1 motions are not part of the repository. Anything derived from them, including trained checkpoints and the
 figure above, is under CC BY-NC-ND 4.0: non-commercial use only.
